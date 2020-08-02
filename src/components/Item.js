@@ -44,7 +44,7 @@ function Item({ name, cost, value, numOwned, handleClick, firstItem }) {
     if (firstItem) {
       itemRef.current.focus();
     }
-  });
+  }, []);
 
   return (
     <ItemSection ref={itemRef} onClick={handleClick} value={name}>
