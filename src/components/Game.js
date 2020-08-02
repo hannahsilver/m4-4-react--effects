@@ -12,6 +12,31 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
+const useKeyDown = (code, callback) => {
+  const handleKeyDown = (event) => {
+    if (event.code === code) {
+      callback();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+};
+
+const useDocumentTitle = (title, fallbackTitle) => {
+  useEffect(() => {
+    document.title = title;
+    return () => {
+      document.title = fallbackTitle;
+    };
+  }, [title]);
+};
+
 const Game = () => {
   // TODO: Replace this with React state!
   const [numCookies, setNumCookies] = React.useState(100);
@@ -34,21 +59,11 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
-  useEffect(() => {
-    const spaceCookie = (ev) => {
-      if (ev.code === "Space") {
-        setNumCookies(numCookies + 1);
-      }
-      window.addEventListener("keydown", spaceCookie);
-      return () => {
-        window.removeEventListener("keydown", spaceCookie);
-      };
-    };
+  useKeyDown("Space", () => {
+    setNumCookies(numCookies + 1);
   });
 
-  useEffect(() => {
-    document.title = numCookies + " cookies";
-  });
+  useDocumentTitle(`${numCookies} cookies`);
 
   return (
     <Wrapper>
